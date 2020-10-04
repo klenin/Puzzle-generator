@@ -8,7 +8,7 @@ def prepareToPossibleValues(possibleValues):
 def checkRow(indexRow, indexColumn, puzzleSolved, possibleValues):
     for j in range(9):
         if puzzleSolved[indexRow][j]!=0:
-           try: possibleValues[indexRow][indexColumn].remove(puzzle[indexRow][j])
+           try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[indexRow][j])
            except ValueError:
                 continue
     return possibleValues
@@ -16,7 +16,7 @@ def checkRow(indexRow, indexColumn, puzzleSolved, possibleValues):
 def checkColumn(indexRow, indexColumn, puzzleSolved, possibleValues):
     for i in range(9):
         if puzzleSolved[i][indexColumn]!=0:
-           try: possibleValues[indexRow][indexColumn].remove(puzzle[i][indexColumn])
+           try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[i][indexColumn])
            except ValueError:
                 continue
     return possibleValues
@@ -27,7 +27,7 @@ def checkBlock(indexRow, indexColumn, puzzleSolved, possibleValues):
     for i in range(3):
         for j in range(3):
             if puzzleSolved[firstIndexRow+i][firstIndexColumn+j]!=0:
-                try: possibleValues[indexRow][indexColumn].remove(puzzle[firstIndexRow+i][firstIndexColumn+j])
+                try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[firstIndexRow+i][firstIndexColumn+j])
                 except ValueError:
                     continue
     return possibleValues
@@ -47,16 +47,16 @@ def Solve(puzzle):
                       [[],[],[],[],[],[],[],[],[]],
                       [[],[],[],[],[],[],[],[],[]],   
                       [[],[],[],[],[],[],[],[],[]]]
-    possibleValues = prepareToPossibleValues(possibleValues) #РІСЃРµ РІР°СЂРёР°РЅС‚С‹ Р·РЅР°С‡РµРЅРёР№ РЅР° РєР°Р¶РґСѓСЋ СЏС‡РµР№РєСѓ
+    possibleValues = prepareToPossibleValues(possibleValues) #все варианты значений на каждую ячейку
     isSmhchanged = True
     while isSmhchanged:
         isSmhchanged = False
         for i in range(9):
             for j in range(9):
                 if puzzleSolved[i][j]==0:
-                    possibleValues = checkRow(i,j,puzzleSolved,possibleValues) #СѓРґР°Р»Р°РµС‚ Р»РёС€РЅРёРµ РІР°СЂРёР°РЅС‚С‹ Р·Р°РїРѕР»РЅРµРЅРёР№ СЏС‡РµР№РєРё РёР· СЃС‚СЂРѕРєРё
-                    possibleValues = checkColumn(i,j,puzzleSolved,possibleValues) #СѓРґР°Р»Р°РµС‚ Р»РёС€РЅРёРµ РІР°СЂРёР°РЅС‚С‹ Р·Р°РїРѕР»РЅРµРЅРёР№ СЏС‡РµР№РєРё РёР· СЃС‚РѕР»Р±С†Р°
-                    possibleValues = checkBlock(i,j,puzzleSolved,possibleValues) #СѓРґР°Р»Р°РµС‚ Р»РёС€РЅРёРµ РІР°СЂРёР°РЅС‚С‹ Р·Р°РїРѕР»РЅРµРЅРёР№ СЏС‡РµР№РєРё РёР· РєРІР°РґСЂР°С‚Р°
+                    possibleValues = checkRow(i,j,puzzleSolved,possibleValues) #удалает лишние варианты заполнений ячейки из строки
+                    possibleValues = checkColumn(i,j,puzzleSolved,possibleValues) #удалает лишние варианты заполнений ячейки из столбца
+                    possibleValues = checkBlock(i,j,puzzleSolved,possibleValues) #удалает лишние варианты заполнений ячейки из квадрата
                     if len(possibleValues[i][j])==1:
                         puzzleSolved[i][j] = possibleValues[i][j][0]
                         isSmhchanged = True
@@ -80,4 +80,3 @@ puzzle = [
 puzzleSolved = Solve(puzzle)
 for i in puzzleSolved:
     print(i)
-
