@@ -32,12 +32,68 @@ def checkBlock(indexRow, indexColumn, puzzleSolved, possibleValues):
                     continue
     return possibleValues
 
-def noChooseMethod():
+def removeAll(indexRow,indexColumn,possibleValues):
+    for i in range(1,10):
+        try: possibleValues[indexRow][indexColumn].remove(i)
+        except ValueError:
+            continue
+    return possibleValues
 
+def noChooseMethodColumn(puzzleSolved,possibleValues):
+    for j in range(9):
+        for k in range(1,10):
+            soughtNumber = k
+            for i in range(9):
+                if puzzleSolved[i][j]==k:
+                    soughtNumber = 0
+            if soughtNumber!=0:
+                countPlace = 0
+                for i in range(9):
+                    if countPlace<2:
+                        if soughtNumber in possibleValues[i][j]:
+                            countPlace+=1
+                            indexSoughtRow = i
+                if countPlace==1:
+                    puzzleSolved[indexSoughtRow][j] = k
     return puzzleSolved
 
-def Solve(puzzle):
-    puzzleSolved = puzzle
+def noChooseMethodRow(puzzleSolved,possibleValues):
+    for i in range(9):
+        for k in range(1,10):
+            soughtNumber = k
+            for j in range(9):
+                if puzzleSolved[i][j]==k:
+                    soughtNumber = 0
+            if soughtNumber!=0:
+                countPlace = 0
+                for j in range(9):
+                    if countPlace<2:
+                        if soughtNumber in possibleValues[i][j]:
+                            countPlace+=1
+                            indexSoughtColumn = i
+                if countPlace==1:
+                    puzzleSolved[i][indexSoughtColumn] = k
+    return puzzleSolved
+
+def lastHeroMethod(possibleValues,puzzleSolved):
+    isSmhchanged = True
+    while isSmhchanged:
+        isSmhchanged = False
+        for i in range(9):
+            for j in range(9):
+                if puzzleSolved[i][j]==0:
+                    possibleValues = checkRow(i,j,puzzleSolved,possibleValues) #пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+                    possibleValues = checkColumn(i,j,puzzleSolved,possibleValues) #пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                    possibleValues = checkBlock(i,j,puzzleSolved,possibleValues) #пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                    if len(possibleValues[i][j])==1:
+                        puzzleSolved[i][j] = possibleValues[i][j][0]
+                        isSmhchanged = True
+                else:
+                   possibleValues = removeAll(i,j,possibleValues)
+    return puzzleSolved
+
+
+def Solve(puzzleSolved):
     possibleValues = [[[],[],[],[],[],[],[],[],[]],
                       [[],[],[],[],[],[],[],[],[]],   
                       [[],[],[],[],[],[],[],[],[]],
@@ -47,36 +103,27 @@ def Solve(puzzle):
                       [[],[],[],[],[],[],[],[],[]],
                       [[],[],[],[],[],[],[],[],[]],   
                       [[],[],[],[],[],[],[],[],[]]]
-    possibleValues = prepareToPossibleValues(possibleValues) #все варианты значений на каждую ячейку
-    isSmhchanged = True
-    while isSmhchanged:
-        isSmhchanged = False
-        for i in range(9):
-            for j in range(9):
-                if puzzleSolved[i][j]==0:
-                    possibleValues = checkRow(i,j,puzzleSolved,possibleValues) #удалает лишние варианты заполнений ячейки из строки
-                    possibleValues = checkColumn(i,j,puzzleSolved,possibleValues) #удалает лишние варианты заполнений ячейки из столбца
-                    possibleValues = checkBlock(i,j,puzzleSolved,possibleValues) #удалает лишние варианты заполнений ячейки из квадрата
-                    if len(possibleValues[i][j])==1:
-                        puzzleSolved[i][j] = possibleValues[i][j][0]
-                        isSmhchanged = True
+    possibleValues = prepareToPossibleValues(possibleValues) #пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    for c in range(3):
+        puzzleSolved = lastHeroMethod(possibleValues,puzzleSolved)
+        puzzleSolved = noChooseMethodColumn(puzzleSolved,possibleValues)
+        puzzleSolved = noChooseMethodRow(puzzleSolved,possibleValues)
     return puzzleSolved
 
 
-
-
 puzzle = [
-    [ 5, 3, 0, 0, 7, 0, 0, 0, 0 ],
-    [ 6, 0, 0, 1, 9, 5, 0, 0, 0 ],
-    [ 0, 9, 8, 0, 0, 0, 0, 6, 0 ],
-    [ 8, 0, 0, 0, 6, 0, 0, 0, 3 ],
-    [ 4, 0, 0, 8, 0, 3, 0, 0, 1 ],
-    [ 7, 0, 0, 0, 2, 0, 0, 0, 6 ],
-    [ 0, 6, 0, 0, 0, 0, 2, 8, 0 ],
-    [ 0, 0, 0, 4, 1, 9, 0, 0, 5 ],
-    [ 0, 0, 0, 0, 8, 0, 0, 7, 9 ]
+    [ 2, 4, 0, 0, 7, 0, 0, 3, 8 ],
+    [ 0, 0, 0, 0, 0, 6, 0, 7, 0 ],
+    [ 3, 0, 0, 0, 4, 0, 6, 0, 0 ],
+    [ 0, 0, 8, 0, 2, 0, 7, 0, 0 ],
+    [ 1, 0, 0, 0, 0, 0, 0, 0, 6 ],
+    [ 0, 0, 7, 0, 3, 0, 4, 0, 0 ],
+    [ 0, 0, 4, 0, 8, 0, 0, 8, 9 ],
+    [ 8, 6, 0, 4, 0, 0, 0, 0, 0 ],
+    [ 9, 1, 0, 0, 6, 0, 0, 0, 2 ]
 ]
 
+puzzleSolved=puzzle
 puzzleSolved = Solve(puzzle)
 for i in puzzleSolved:
     print(i)
