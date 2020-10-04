@@ -82,9 +82,9 @@ def lastHeroMethod(possibleValues,puzzleSolved):
         for i in range(9):
             for j in range(9):
                 if puzzleSolved[i][j]==0:
-                    possibleValues = checkRow(i,j,puzzleSolved,possibleValues) #������� ������ �������� ���������� ������ �� ������
-                    possibleValues = checkColumn(i,j,puzzleSolved,possibleValues) #������� ������ �������� ���������� ������ �� �������
-                    possibleValues = checkBlock(i,j,puzzleSolved,possibleValues) #������� ������ �������� ���������� ������ �� ��������
+                    possibleValues = checkRow(i,j,puzzleSolved,possibleValues) #remove extra values from string
+                    possibleValues = checkColumn(i,j,puzzleSolved,possibleValues) #remove extra values from column
+                    possibleValues = checkBlock(i,j,puzzleSolved,possibleValues) #remove extra values from block
                     if len(possibleValues[i][j])==1:
                         puzzleSolved[i][j] = possibleValues[i][j][0]
                         isSmhchanged = True
@@ -103,8 +103,8 @@ def Solve(puzzleSolved):
                       [[],[],[],[],[],[],[],[],[]],
                       [[],[],[],[],[],[],[],[],[]],   
                       [[],[],[],[],[],[],[],[],[]]]
-    possibleValues = prepareToPossibleValues(possibleValues) #��� �������� �������� �� ������ ������
-    for c in range(3):
+    possibleValues = prepareToPossibleValues(possibleValues) #fill in all values
+    for c in range(3): #crutch, replace with while
         puzzleSolved = lastHeroMethod(possibleValues,puzzleSolved)
         puzzleSolved = noChooseMethodColumn(puzzleSolved,possibleValues)
         puzzleSolved = noChooseMethodRow(puzzleSolved,possibleValues)
