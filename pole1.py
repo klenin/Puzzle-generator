@@ -1,4 +1,3 @@
-#from test import puzzleSolved
 
 
 def prepareToPossibleValues(possibleValues):
@@ -19,6 +18,7 @@ def removeAll(indexRow, indexColumn, possibleValues):
 
 
 def deleteExtraValues(puzzleSolved, possibleValues):
+    import test
     for i in range(9):
         for j in range(9):
             if puzzleSolved[i][j] != 0:
