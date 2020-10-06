@@ -5,24 +5,20 @@ def prepareToPossibleValues(possibleValues):
                 possibleValues[i][j].append(k)
     return possibleValues
 
-def checkRow(indexRow, indexColumn, puzzleSolved, possibleValues):
-    for j in range(9):
+def checkAll(indexRow, indexColumn, puzzleSolved, possibleValues):
+    for j in range(9):                                                                      #row
         if puzzleSolved[indexRow][j]!=0:
            try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[indexRow][j])
            except ValueError:
                 continue
-    return possibleValues
 
-def checkColumn(indexRow, indexColumn, puzzleSolved, possibleValues):
-    for i in range(9):
+    for i in range(9):                                                                      #column
         if puzzleSolved[i][indexColumn]!=0:
            try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[i][indexColumn])
            except ValueError:
                 continue
-    return possibleValues
 
-def checkBlock(indexRow, indexColumn, puzzleSolved, possibleValues):
-    firstIndexRow = 3*(indexRow//3)
+    firstIndexRow = 3*(indexRow//3)                                                         #block
     firstIndexColumn = 3*(indexColumn//3)
     for i in range(3):
         for j in range(3):
@@ -39,7 +35,7 @@ def removeAll(indexRow,indexColumn,possibleValues):
             continue
     return possibleValues
 
-def noChooseMethodColumn(puzzleSolved,possibleValues):
+def noChooseMethod(puzzleSolved,possibleValues):
     for j in range(9):
         for k in range(1,10):
             soughtNumber = k
@@ -55,9 +51,6 @@ def noChooseMethodColumn(puzzleSolved,possibleValues):
                             indexSoughtRow = i
                 if countPlace==1:
                     puzzleSolved[indexSoughtRow][j] = k
-    return puzzleSolved
-
-def noChooseMethodRow(puzzleSolved,possibleValues):
     for i in range(9):
         for k in range(1,10):
             soughtNumber = k
@@ -75,6 +68,14 @@ def noChooseMethodRow(puzzleSolved,possibleValues):
                     puzzleSolved[i][indexSoughtColumn] = k
     return puzzleSolved
 
+#def noChooseMethodBlock(puzzleSolved,possibleValues):
+#    for i in range(3):
+#        for k in range(1,10):
+#            soughtNumber = k
+#            for j in range(3):
+#                
+#    return puzzleSolved
+
 def lastHeroMethod(possibleValues,puzzleSolved):
     isSmhchanged = True
     while isSmhchanged:
@@ -82,9 +83,7 @@ def lastHeroMethod(possibleValues,puzzleSolved):
         for i in range(9):
             for j in range(9):
                 if puzzleSolved[i][j]==0:
-                    possibleValues = checkRow(i,j,puzzleSolved,possibleValues) #remove extra values from string
-                    possibleValues = checkColumn(i,j,puzzleSolved,possibleValues) #remove extra values from column
-                    possibleValues = checkBlock(i,j,puzzleSolved,possibleValues) #remove extra values from block
+                    possibleValues = checkAll(i,j,puzzleSolved,possibleValues) #remove extra values from block
                     if len(possibleValues[i][j])==1:
                         puzzleSolved[i][j] = possibleValues[i][j][0]
                         isSmhchanged = True
@@ -106,8 +105,8 @@ def Solve(puzzleSolved):
     possibleValues = prepareToPossibleValues(possibleValues) #fill in all values
     for c in range(3): #crutch, replace with while
         puzzleSolved = lastHeroMethod(possibleValues,puzzleSolved)
-        puzzleSolved = noChooseMethodColumn(puzzleSolved,possibleValues)
-        puzzleSolved = noChooseMethodRow(puzzleSolved,possibleValues)
+        puzzleSolved = noChooseMethod(puzzleSolved,possibleValues)
+#        puzzleSolved = noChooseMethodBlock(puzzleSolved,possibleValues)
     return puzzleSolved
 
 
@@ -124,6 +123,5 @@ puzzle = [
 ]
 
 puzzleSolved=puzzle
-puzzleSolved = Solve(puzzle)
-for i in puzzleSolved:
-    print(i)
+puzzleSolved = Solve(puzzleSolved)
+print(puzzleSolved)
