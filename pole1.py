@@ -31,36 +31,17 @@ def deleteExtraValues(puzzleSolved, possibleValues):
                             possibleValues[firstIndexRow+chvr][firstIndexColumn+chvc].remove(puzzleSolved[i][j])
                         except ValueError:
                            continue
-#    for i in possibleValues:
+ #   for i in possibleValues:
 #        print(i)
 #    print("fff")
 #    print(possibleValues[7][7])
-    
-
-#    for j in range(9):                                                                      #row
-#        if puzzleSolved[indexRow][j]!=0:
-#           try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[indexRow][j])
-#           except ValueError:
-#                continue
-#
-#    for i in range(9):                                                                      #column
-#        if puzzleSolved[i][indexColumn]!=0:
-#           try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[i][indexColumn])
-#           except ValueError:
-#                continue
-#
-#    firstIndexRow = 3*(indexRow//3)                                                         #block
-#    firstIndexColumn = 3*(indexColumn//3)
-#    for i in range(3):
-#        for j in range(3):
-#            if puzzleSolved[firstIndexRow+i][firstIndexColumn+j]!=0:
-#                try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[firstIndexRow+i][firstIndexColumn+j])
-#                except ValueError:
-#                    continue 
+     
     return possibleValues
 
 
 def noChooseMethod(puzzleSolved,possibleValues):
+    global continueSolving
+    isSmthChange = False
     for j in range(9):
         for k in range(1,10):
             soughtNumber = k
@@ -77,7 +58,7 @@ def noChooseMethod(puzzleSolved,possibleValues):
                 if countPlace==1:
                     puzzleSolved[indexSoughtRow][j] = k
                     possibleValues = deleteExtraValues(puzzleSolved,possibleValues)
-                    
+                    isSmthChange = True                   
     for i in range(9):
         for k in range(1,10):
             soughtNumber = k
@@ -94,18 +75,42 @@ def noChooseMethod(puzzleSolved,possibleValues):
                 if countPlace==1:
                     puzzleSolved[i][indexSoughtColumn] = k
                     possibleValues = deleteExtraValues(puzzleSolved,possibleValues)
+                    isSmthChange = True
                     
-    return puzzleSolved
-
-def noChooseMethodBlock(puzzleSolved,possibleValues):
-    for counBlock in range(9):
+    for countBlock in range(9):
+        firstIndexRow = 3*(countBlock // 3)
+        firstIndexColumn = 3*(countBlock % 3)
         for k in range(1,10):
+            soughtNumber = k
             for i in range(3):
                 for j in range(3):
-                    m=0
+                    row = firstIndexRow+i
+                    col = firstIndexColumn+j
+                    if puzzleSolved[row][col]==k:
+                        soughtNumber = 0
+            if soughtNumber!=0:
+                countPlace = 0
+                for i in range(3):
+                    for j in range(3):
+                        row = firstIndexRow+i
+                        col = firstIndexColumn+j
+                        if countPlace<2:
+                            if soughtNumber in possibleValues[row][col]:
+                                countPlace+=1
+                                indexSoughtColumn = row
+                                indexSoughtRow = col
+                if countPlace == 1:
+                    puzzleSolved[indexSoughtColumn][indexSoughtRow] = soughtNumber
+                    possibleValues = deleteExtraValues(puzzleSolved,possibleValues)
+                    isSmthChange = True
+    if not isSmthChange:
+        continueSolving = False
+    else:
+        continueSolving = True
     return puzzleSolved
 
 def lastHeroMethod(possibleValues,puzzleSolved):
+    global continueSolving
     isSmhchanged = True
     while isSmhchanged:
         isSmhchanged = False
@@ -116,9 +121,7 @@ def lastHeroMethod(possibleValues,puzzleSolved):
                         puzzleSolved[i][j] = possibleValues[i][j][0]
                         possibleValues = deleteExtraValues(puzzleSolved,possibleValues)
                         isSmhchanged = True
-#                else:
-#                   possibleValues = removeAll(i,j,possibleValues)
-
+    continueSolving = False
     return puzzleSolved
 
 
@@ -134,10 +137,11 @@ def Solve(puzzleSolved):
                       [[],[],[],[],[],[],[],[],[]]]
     possibleValues = prepareToPossibleValues(possibleValues) #fill in all values
     possibleValues = deleteExtraValues(puzzleSolved,possibleValues)
-    for chcr in range(2):
+    global continueSolving
+    continueSolving = True
+    while continueSolving:
         puzzleSolved = lastHeroMethod(possibleValues,puzzleSolved)
         puzzleSolved = noChooseMethod(puzzleSolved,possibleValues)
-        #puzzleSolved = noChooseMethodBlock(puzzleSolved,possibleValues)
     return puzzleSolved
 
 
