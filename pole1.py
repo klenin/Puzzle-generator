@@ -1,5 +1,3 @@
-
-
 def prepareToPossibleValues(possibleValues):
     for i in range(9):
         for j in range(9):
@@ -18,7 +16,6 @@ def removeAll(indexRow, indexColumn, possibleValues):
 
 
 def deleteExtraValues(puzzleSolved, possibleValues):
-
     for i in range(9):
         for j in range(9):
             if puzzleSolved[i][j] != 0:
@@ -38,10 +35,17 @@ def deleteExtraValues(puzzleSolved, possibleValues):
                                                                chvc].remove(puzzleSolved[i][j])
                         except ValueError:
                             continue
+  #   for i in possibleValues:
+#        print(i)
+#    print("fff")
+#    print(possibleValues[7][7])
+
     return possibleValues
 
 
 def noChooseMethod(puzzleSolved, possibleValues):
+    global continueSolving
+    isSmthChange = False
     for j in range(9):
         for k in range(1, 10):
             soughtNumber = k
@@ -59,7 +63,7 @@ def noChooseMethod(puzzleSolved, possibleValues):
                     puzzleSolved[indexSoughtRow][j] = k
                     possibleValues = deleteExtraValues(
                         puzzleSolved, possibleValues)
-
+                    isSmthChange = True
     for i in range(9):
         for k in range(1, 10):
             soughtNumber = k
@@ -77,20 +81,44 @@ def noChooseMethod(puzzleSolved, possibleValues):
                     puzzleSolved[i][indexSoughtColumn] = k
                     possibleValues = deleteExtraValues(
                         puzzleSolved, possibleValues)
+                    isSmthChange = True
 
-    return puzzleSolved
-
-
-def noChooseMethodBlock(puzzleSolved, possibleValues):
-    for counBlock in range(9):
+    for countBlock in range(9):
+        firstIndexRow = 3*(countBlock // 3)
+        firstIndexColumn = 3*(countBlock % 3)
         for k in range(1, 10):
+            soughtNumber = k
             for i in range(3):
                 for j in range(3):
-                    m = 0
+                    row = firstIndexRow+i
+                    col = firstIndexColumn+j
+                    if puzzleSolved[row][col] == k:
+                        soughtNumber = 0
+            if soughtNumber != 0:
+                countPlace = 0
+                for i in range(3):
+                    for j in range(3):
+                        row = firstIndexRow+i
+                        col = firstIndexColumn+j
+                        if countPlace < 2:
+                            if soughtNumber in possibleValues[row][col]:
+                                countPlace += 1
+                                indexSoughtColumn = row
+                                indexSoughtRow = col
+                if countPlace == 1:
+                    puzzleSolved[indexSoughtColumn][indexSoughtRow] = soughtNumber
+                    possibleValues = deleteExtraValues(
+                        puzzleSolved, possibleValues)
+                    isSmthChange = True
+    if not isSmthChange:
+        continueSolving = False
+    else:
+        continueSolving = True
     return puzzleSolved
 
 
 def lastHeroMethod(possibleValues, puzzleSolved):
+    global continueSolving
     isSmhchanged = True
     while isSmhchanged:
         isSmhchanged = False
@@ -102,7 +130,7 @@ def lastHeroMethod(possibleValues, puzzleSolved):
                         possibleValues = deleteExtraValues(
                             puzzleSolved, possibleValues)
                         isSmhchanged = True
-
+    continueSolving = False
     return puzzleSolved
 
 
@@ -119,48 +147,29 @@ def Solve(puzzleSolved):
     possibleValues = prepareToPossibleValues(
         possibleValues)  # fill in all values
     possibleValues = deleteExtraValues(puzzleSolved, possibleValues)
-    for chcr in range(2):
+    global continueSolving
+    continueSolving = True
+    while continueSolving:
         puzzleSolved = lastHeroMethod(possibleValues, puzzleSolved)
         puzzleSolved = noChooseMethod(puzzleSolved, possibleValues)
-
     return puzzleSolved
 
 
-# easy
 '''
 puzzle = [
-    [5, 1, 0, 0, 8, 3, 0, 0, 0],
-    [3, 0, 0, 2, 0, 5, 1, 6, 0],
-    [9, 7, 0, 4, 0, 0, 0, 0, 3],
-    [0, 0, 7, 0, 0, 8, 9, 3, 6],
-    [0, 0, 0, 0, 6, 2, 8, 0, 0],
-    [6, 8, 0, 0, 0, 0, 2, 1, 7],
-    [7, 6, 1, 0, 0, 0, 0, 9, 0],
-    [4, 3, 9, 0, 0, 0, 7, 2, 0],
-    [0, 0, 0, 0, 0, 0, 6, 4, 1]
+[0, 0, 5, 1, 0, 6, 0, 0, 0],
+[0, 0, 0, 0, 9, 0, 0, 0, 7],
+[0, 1, 0, 0, 0, 4, 3, 0, 2],
+[0, 8, 0, 0, 0, 0, 0, 6, 4],
+[0, 0, 0, 0, 0, 0, 2, 3, 0],
+[0, 0, 0, 0, 7, 0, 0, 0, 0],
+[0, 0, 0, 6, 0, 9, 0, 0, 0],
+[4, 7, 0, 0, 0, 0, 0, 0, 0],
+[5, 0, 3, 0, 0, 0, 9, 2, 0]
 ]
-'''
-# middle
-'''
-puzzle = [
-    [0, 0, 5, 1, 0, 6, 0, 0, 0],
-    [0, 0, 0, 0, 9, 0, 0, 0, 7],
-    [0, 1, 0, 0, 0, 4, 3, 0, 2],
-    [0, 8, 0, 0, 0, 0, 0, 6, 4],
-    [0, 0, 0, 0, 0, 0, 2, 3, 0],
-    [0, 0, 0, 0, 7, 0, 0, 0, 0],
-    [0, 0, 0, 6, 0, 9, 0, 0, 0],
-    [4, 7, 0, 0, 0, 0, 0, 0, 0],
-    [5, 0, 3, 0, 0, 0, 9, 2, 0]
-]
-'''
 
-'''
+puzzleSolved=puzzle
+puzzleSolved = Solve(puzzleSolved)
 for i in puzzleSolved:
     print(i)
-
-for row in puzzleSolved:
-    for elem in row:
-        print(elem, end=' ')
-    print()
 '''
