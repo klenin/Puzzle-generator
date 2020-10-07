@@ -1,4 +1,3 @@
 {
-  "TestFramework": "Pytest",
-  "Interpreter": "Global|VisualStudio|Python37_64"
+  "Interpreter": "Global|PythonCore|3.7"
 }

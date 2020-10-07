@@ -159,6 +159,7 @@ def Solve(puzzleSolved):
     return puzzleSolved
 
 
+'''
 puzzle = [
     [0, 0, 5, 1, 0, 6, 0, 0, 0],
     [0, 0, 0, 0, 9, 0, 0, 0, 7],
@@ -174,3 +175,4 @@ puzzle = [
 
 puzzleSolved = copy.deepcopy(puzzle)
 puzzleSolved = Solve(puzzleSolved)
+'''
