@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\testing",
+    "\\__pycache__"
   ],
-  "SelectedNode": "\\pole1.py",
+  "SelectedNode": "\\test.py",
   "PreviewInSolutionExplorer": false
 }
