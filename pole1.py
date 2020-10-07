@@ -18,7 +18,7 @@ def removeAll(indexRow, indexColumn, possibleValues):
 
 
 def deleteExtraValues(puzzleSolved, possibleValues):
-    import test
+
     for i in range(9):
         for j in range(9):
             if puzzleSolved[i][j] != 0:
@@ -38,32 +38,6 @@ def deleteExtraValues(puzzleSolved, possibleValues):
                                                                chvc].remove(puzzleSolved[i][j])
                         except ValueError:
                             continue
-#    for i in possibleValues:
-#        print(i)
-#    print("fff")
-#    print(possibleValues[7][7])
-
-
-#    for j in range(9):                                                                      #row
-#        if puzzleSolved[indexRow][j]!=0:
-#           try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[indexRow][j])
-#           except ValueError:
-#                continue
-#
-#    for i in range(9):                                                                      #column
-#        if puzzleSolved[i][indexColumn]!=0:
-#           try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[i][indexColumn])
-#           except ValueError:
-#                continue
-#
-#    firstIndexRow = 3*(indexRow//3)                                                         #block
-#    firstIndexColumn = 3*(indexColumn//3)
-#    for i in range(3):
-#        for j in range(3):
-#            if puzzleSolved[firstIndexRow+i][firstIndexColumn+j]!=0:
-#                try: possibleValues[indexRow][indexColumn].remove(puzzleSolved[firstIndexRow+i][firstIndexColumn+j])
-#                except ValueError:
-#                    continue
     return possibleValues
 
 
@@ -128,8 +102,6 @@ def lastHeroMethod(possibleValues, puzzleSolved):
                         possibleValues = deleteExtraValues(
                             puzzleSolved, possibleValues)
                         isSmhchanged = True
-#                else:
-#                   possibleValues = removeAll(i,j,possibleValues)
 
     return puzzleSolved
 
@@ -150,7 +122,7 @@ def Solve(puzzleSolved):
     for chcr in range(2):
         puzzleSolved = lastHeroMethod(possibleValues, puzzleSolved)
         puzzleSolved = noChooseMethod(puzzleSolved, possibleValues)
-        #puzzleSolved = noChooseMethodBlock(puzzleSolved,possibleValues)
+
     return puzzleSolved
 
 
@@ -182,9 +154,6 @@ puzzle = [
     [5, 0, 3, 0, 0, 0, 9, 2, 0]
 ]
 '''
-
-#puzzleSolved = puzzle
-#puzzleSolved = Solve(puzzleSolved)
 
 '''
 for i in puzzleSolved:
