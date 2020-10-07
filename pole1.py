@@ -1,3 +1,7 @@
+
+import copy
+
+
 def prepareToPossibleValues(possibleValues):
     for i in range(9):
         for j in range(9):
@@ -155,21 +159,18 @@ def Solve(puzzleSolved):
     return puzzleSolved
 
 
-'''
 puzzle = [
-[0, 0, 5, 1, 0, 6, 0, 0, 0],
-[0, 0, 0, 0, 9, 0, 0, 0, 7],
-[0, 1, 0, 0, 0, 4, 3, 0, 2],
-[0, 8, 0, 0, 0, 0, 0, 6, 4],
-[0, 0, 0, 0, 0, 0, 2, 3, 0],
-[0, 0, 0, 0, 7, 0, 0, 0, 0],
-[0, 0, 0, 6, 0, 9, 0, 0, 0],
-[4, 7, 0, 0, 0, 0, 0, 0, 0],
-[5, 0, 3, 0, 0, 0, 9, 2, 0]
+    [0, 0, 5, 1, 0, 6, 0, 0, 0],
+    [0, 0, 0, 0, 9, 0, 0, 0, 7],
+    [0, 1, 0, 0, 0, 4, 3, 0, 2],
+    [0, 8, 0, 0, 0, 0, 0, 6, 4],
+    [0, 0, 0, 0, 0, 0, 2, 3, 0],
+    [0, 0, 0, 0, 7, 0, 0, 0, 0],
+    [0, 0, 0, 6, 0, 9, 0, 0, 0],
+    [4, 7, 0, 0, 0, 0, 0, 0, 0],
+    [5, 0, 3, 0, 0, 0, 9, 2, 0]
 ]
 
-puzzleSolved=puzzle
+
+puzzleSolved = copy.deepcopy(puzzle)
 puzzleSolved = Solve(puzzleSolved)
-for i in puzzleSolved:
-    print(i)
-'''
